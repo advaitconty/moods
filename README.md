@@ -5,13 +5,20 @@ It runs on a couple basic GET and POST requests to help play music directly on y
 
 It's very adaptable, and picks up all the MP3s you have of your favourite songs!
 
+## App
+Check the app out at [moods-remastered](https://github.com/advaitconty/moods-remastered)
+
 ## Demo
 ***This demo does not use the parts mentioned below because they weren't delivered in time. Will be updated once the parts are here.***
 
-[![](https://markdown-videos-api.jorgenkh.no/youtube/MyupkJgGn_4)](https://youtu.be/MyupkJgGn_4)
+[![Moods Demo](https://markdown-videos-api.jorgenkh.no/url?url=https%3A%2F%2Fyoutu.be%2FNUVO6ZB55nc)](https://youtu.be/NUVO6ZB55nc)
 
-## Swift App Code
-refer to MoodsApp folder or [this](https://github.com/contyadvait/moodsapp)
+## If you wanna use this with AI...,
+make sure you create a file called `api_key.py` that contains this:
+```python
+ANTHROPIC_AI_KEY = "Your API Key"
+```
+This app uses Claude for AI
 
 ## How do I make this my own?
 The only things you will need to setup are the non-Python based dependencies for the requirements (check requirements.txt) and `config.py`. Here is an example `config.py` for you to use in creating your own one
@@ -211,5 +218,16 @@ Example input (song):
 {
     "key": "somepassword",
     "song": "BoyWithUke - Burn"
+}
+```
+
+### POST: /play-with-mood
+- Accepts a JSON with a custom Mood or Vibe to play and plays a song through AI
+
+Example input
+```json
+{
+    "key": "somepassword",
+    "mood": "happy"
 }
 ```

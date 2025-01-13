@@ -3,7 +3,11 @@ import music
 from flask import Flask, request, jsonify
 from player import MusicPlayer
 import json
-import threading
+try:
+    import ai
+    ai_available = True
+except:
+    ai_available = False
 
 app = Flask(__name__)
 player = MusicPlayer()
@@ -14,7 +18,7 @@ def main():
 
 @app.route("/current")
 def current():
-    return jsonify({"song_playing": player.song_playing})
+    return jsonify({"song_playing": player.song_playing[len(config.MUSIC_DIR) + 1:-4]})
 
 @app.route("/super")
 def super():
@@ -86,5 +90,44 @@ def stop():
     print("error")
     return jsonify({"error": "No song is currently playing"}), 400
 
+@app.route("/auth", methods=["POST"])
+def auth():
+    data = request.json
+    if "key" not in data:
+        return jsonify({"error": "Missing 'key' in request"}), 400
+
+    if data["key"] == config.KEY:
+        return "Key is correct", 200
+    return "Key is wrong", 403
+
+
+if ai_available:
+    @app.route("/play-with-mood", methods=["POST"])
+    def mood():
+        data = request.json
+
+
+        if "key" not in data:
+            return jsonify({"error": "Missing 'key' in request"}), 400
+
+        if data["key"] == config.KEY:
+            # try:
+            try: 
+                if player.stop():
+                    print("stopped")
+            except Exception as e:
+                print("something")
+
+            ai_data = ai.return_song(data["mood"], music.get_available_songs())
+            print(ai_data)
+            song = f"{ai_data["selected_song"]}.mp3"
+            if player.play(f"{config.MUSIC_DIR}/{song}"):
+                return jsonify({"message": f"Started playing {ai_data}", "reason": ai_data["reasoning"], "playing": f"{ai_data["selected_song"]}.mp3"})
+            else:
+                return jsonify({"error": "Failed to play song"}), 500
+
+        
+        return "Key is wrong", 403
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")

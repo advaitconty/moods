@@ -2,3 +2,4 @@ flask
 sounddevice
 numpy
 soundfile
+claude-env

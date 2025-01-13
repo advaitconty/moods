@@ -7,7 +7,6 @@ def get_available_songs():
     for file in os.listdir(config.MUSIC_DIR):
         extension = list(file.split("."))[-1]
         if extension == "mp3":
-            print(f"File {file} supported, adding to supported files")
             available_files.append(file[:-4])
 
     if available_files == []:
@@ -38,5 +37,5 @@ def organize_songs(songs):
 
 if __name__ == "__main__":  
     import json
-    result = organize_songs(get_available_songs())
+    result = get_available_songs()
     print(json.dumps(result, indent=2, ensure_ascii=False))
