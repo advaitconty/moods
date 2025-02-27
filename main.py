@@ -1,6 +1,6 @@
 import config
 import music
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from player import MusicPlayer
 import json
 try:
@@ -14,7 +14,7 @@ player = MusicPlayer()
 
 @app.route("/")
 def main():
-    return "Server has started"
+    return render_template("index.html")
 
 @app.route("/current")
 def current():

@@ -1,4 +1,4 @@
-MUSIC_DIR = "/Volumes/MUSIC" # without the slash at the end
+MUSIC_DIR = "C:/Users/advaitconty" # without the slash at the end
 KEY = "soote" # So no one just POSTs to your server and plays music
 
 # Optional

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moods Music Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <h1>Moods Music Player</h1>
+            <p class="tagline">Simple API to play music with minimal friction, right when you need it.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <main>
+            <section>
+                <p>Have you ever felt down one day and wanted the least amount of friction in your room to start playing music? Well, introducing <strong>Moods</strong>, your best friend for this!</p>
+                
+                <p>It runs on a couple basic GET and POST requests to help play music directly on your PC. There is also a mobile app (refer to the mobile_apps folder for code) which is basically a set of simple buttons.</p>
+                
+                <p>It's very adaptable, and picks up all the MP3s you have of your favourite songs!</p>
+                <p><em>Now that cafe has given me the encouragement to work on this, I shall make a proper web UI soon</em></p>
+            </section>
+            
+            <section>
+                <h2>Current Song</h2>
+                <div class="player-placeholder">
+                    <p id="song-display">No song is currently playing</p>
+                    <div id="player-controls">
+                        <button id="play-button">▶️ Play</button>
+                        <button id="pause-button">⏸️ Pause</button>
+                        <button id="stop-button">⏹️ Stop</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <h2>API Endpoints</h2>
+                
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> <code>/available</code></h3>
+                    <p>Get every single song available (albeit unorganised)</p>
+                    <pre><code class="language-json">[
+    "BoyWithUke - Burn",
+    "Halden Rule & Aze - all for u",
+    "BoyWithUke - I Wish",
+    "Robotaki - Dukkha",
+    "Robotaki - Butterscotch (feat. Jamie Fine & falcxne)",
+    "Arctic Monkeys - 505",
+    "Powfu & beabadoobee - death bed (coffee for your head)",
+    "JVKE - lavender (feat. Pink Sweat$)"
+]</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> <code>/current</code></h3>
+                    <p>Get the current song that's playing - one of the things that the above current view relies on!</p>
+                    <pre><code class="language-json">{
+    "song_playing": "/Users/contyadvait/Music/contyshare/BoyWithUke - I Wish.mp3"
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> <code>/super</code></h3>
+                    <p>All songs, organized by the artist that made it. This function assumes that your song name is in the order of <code>Artist - Song Name.mp3</code></p>
+                    <pre><code class="language-json">{
+"BoyWithUke": [
+    "Burn",
+    "I Wish",
+    "Animal Crackers",
+    "Falling for You",
+    "Pitfall",
+    "Paper Planes",
+    "Blurry Nights",
+    "Nightmare",
+    "Sick of U (feat. Oliver Tree)",
+    "Can You Feel It_",
+    "Let Me Down",
+    "Corduroy",
+    "IDGAF (feat. blackbear)",
+    "Lovely",
+    "Toxic",
+    "Long Drives",
+    "Understand",
+    "Petrichor (interlude)",
+    "Backseat",
+    "Ghost",
+    "Prairies (feat. mxmtoon)",
+    "Two Moons"
+],
+"Robotaki": [
+    "Dukkha",
+    "Butterscotch (feat. Jamie Fine & falcxne)",
+    "Obelisk",
+    "A Universal Truth",
+    "Los Angeles (feat. Maiah Manser)",
+    "Something from Nothing",
+    "Dreamcatcher (Night Mix) (feat. Miko)",
+    "Identity (feat. Record Heat)",
+    "Dreamcatcher (feat. Miko)-1",
+    "Holding On (feat. Billboard)",
+    "Now That We've Been in Love (feat. Pell)",
+    "Dreamcatcher (feat. Miko)",
+    "Quasar",
+    "Dreamcatcher (Night Mix)",
+    "Passing of Time",
+    "The Possibility of a Dream Coming True"
+],
+"Arctic Monkeys": [
+    "505",
+    "I Wanna Be Yours"
+]
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> <code>/playlists</code></h3>
+                    <p>Get all the playlists configured (defined in <code>config.py</code>)</p>
+                    <pre><code class="language-json">{
+    "relax": [
+        "BoyWithUke - I Wish.mp3",
+        "BoyWithUke - Animal Crackers.mp3",
+        "BoyWithUke - Nightmare.mp3",
+        "BoyWithUke - Blurry Nights.mp3"
+    ],
+    "wind down": [
+        "C418 - Minecraft.mp3",
+        "C418 - Sweden.mp3",
+        "C418 - Mice On Venus.mp3",
+        "C418 - Subwoofer Lullaby.mp3",
+        "C418 - Wet Hands.mp3",
+        "C418 - Haggstrom.mp3"
+    ]
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> <code>/pause</code></h3>
+                    <p>Will pause the song that is currently playing</p>
+                    
+                    <p><strong>Success:</strong></p>
+                    <pre><code class="language-json">{
+    "message": "Paused playback"
+}</code></pre>
+                    
+                    <p><strong>Error:</strong></p>
+                    <pre><code class="language-json">{
+    "error": "No song is currently playing"
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> <code>/resume</code></h3>
+                    <p>Will resume the currently playing song</p>
+                    
+                    <p><strong>Success:</strong></p>
+                    <pre><code class="language-json">{
+    "message": "Resumed playback"
+}</code></pre>
+                    
+                    <p><strong>Failure:</strong></p>
+                    <pre><code class="language-json">{
+    "error": "No song is currently paused"
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h3><span class="method get">GET</span> <code>/stop</code></h3>
+                    <p>Will stop the currently playing song</p>
+                    
+                    <p><strong>Success:</strong></p>
+                    <pre><code class="language-json">{
+    "message": "Stopped playback"
+}</code></pre>
+                    
+                    <p><strong>Failure:</strong></p>
+                    <pre><code class="language-json">{
+    "error": "No song is currently playing"
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h3><span class="method post">POST</span> <code>/play</code></h3>
+                    <p>Accepts a JSON of what is to be played, can be a playlist or a song</p>
+                    
+                    <p><strong>Input for Playlist:</strong></p>
+                    <pre><code class="language-json">{
+    "key": "somepassword",
+    "playlist": "relax"
+}</code></pre>
+                    
+                    <p><strong>Input for Song:</strong></p>
+                    <pre><code class="language-json">{
+    "key": "somepassword",
+    "song": "BoyWithUke - Burn"
+}</code></pre>
+                </div>
+                
+                <div class="endpoint">
+                    <h3><span class="method post">POST</span> <code>/play-with-mood</code></h3>
+                    <div class="caution">
+                        <div class="caution-header">⚠️ Warning</div>
+                        <p>This is only available if you have set up your Claude/Anthropic API key in <code>api_key.py</code></p>
+                    </div>
+                    
+                    <p>Accepts a JSON with a custom mood or vibe the user wants to play and Claude will select the song to play</p>
+                    
+                    <p><strong>Input:</strong></p>
+                    <pre><code class="language-json">{
+    "key": "somepassword",
+    "mood": "happy"
+}</code></pre>
+                </div>
+            </section>
+            
+            <hr>
+            
+            <section>
+                <h2>Adapting it to be your own</h2>
+                <p>Being the adaptable bunch it is, it has been designed to run on lower-end hardware (a Raspberry Pi Zero 2 W).</p>
+                <p>To get started on making this your own, you'll need to set up the <code>config.py</code> file for use in your own one:</p>
+                
+                <pre><code class="language-python">MUSIC_DIR = "/Users/conytadvait/Music" 
+# Without the / at the end else it won't work!
+
+KEY = "something" 
+# For security reasons, so your friends can't just randomly POST to it!
+
+# Not required but up to you!
+PLAYLISTS = {"wind down": ["C418 - Minecraft.mp3", 
+                          "C418 - Sweden.mp3", 
+                          "C418 - Mice On Venus.mp3",
+                          "C418 - Subwoofer Lullaby.mp3",
+                          "C418 - Wet Hands.mp3",
+                          "C418 - Haggstrom.mp3"],
+            "relax": ["BoyWithUke - I Wish.mp3",
+                      "BoyWithUke - Animal Crackers.mp3",
+                      "BoyWithUke - Nightmare.mp3",
+                      "BoyWithUke - Blurry Nights.mp3"]}</code></pre>
+                
+                <p>Finally, if you want to set up the mobile app to your own server, just change the server and password in settings!</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
